@@ -40,6 +40,10 @@ healthRouter.get('/health', async (_req: Request, res: Response) => {
     email: config.credentials?.client_email,
     cryptoTest,
     authTest,
+    charCodes: Array.from(pk.slice(0, 40)).map(c => c.charCodeAt(0)),
+    rawEnvSample: process.env.GOOGLE_SERVICE_ACCOUNT_KEY?.slice(0, 30),
+    rawEnvLen: process.env.GOOGLE_SERVICE_ACCOUNT_KEY?.length,
+    nodeVersion: process.version,
     stack,
     timestamp: new Date().toISOString(),
   });
