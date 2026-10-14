@@ -40,7 +40,9 @@ function validateAndNormalizeCredentials(parsed: any): ServiceAccountCredentials
   if (parsed.client_email.trim().length === 0 || parsed.private_key.trim().length === 0) {
     throw new Error('Invalid credentials: client_email or private_key missing');
   }
-  parsed.private_key = parsed.private_key.replace(/\\n/g, '\n');
+  let key = parsed.private_key;
+  key = key.replace(/\\+n/g, '\n').replace(/\\+r/g, '').replace(/\r\n/g, '\n');
+  parsed.private_key = key;
   return parsed as ServiceAccountCredentials;
 }
 
