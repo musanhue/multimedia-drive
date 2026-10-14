@@ -47,8 +47,8 @@ export class ApiClient {
 
   constructor(config?: ApiClientConfig) {
     var cfg = config || {};
-    var defaultBase = '';
-    if (typeof window !== 'undefined' && window.location && window.location.protocol !== 'file:') {
+    var defaultBase = 'https://multimedia-drive.onrender.com';
+    if (typeof window !== 'undefined' && window.location && window.location.protocol !== 'file:' && window.location.origin) {
       defaultBase = window.location.origin;
     }
     this.baseUrl = cfg.baseUrl || defaultBase;
