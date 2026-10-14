@@ -41,8 +41,22 @@ function validateAndNormalizeCredentials(parsed: any): ServiceAccountCredentials
     throw new Error('Invalid credentials: client_email or private_key missing');
   }
   let key = parsed.private_key;
-  key = key.replace(/\\+n/g, '\n').replace(/\\+r/g, '').replace(/\r\n/g, '\n');
-  parsed.private_key = key;
+  key = key.replace(/\\+r/g, '').replace(/\\+n/g, '\n').replace(/\r/g, '');
+  const lines = key
+    .split('\n')
+    .map((l: string) => l.trim().replace(/^\\+/, '').replace(/\\+$/, ''))
+    .filter((l: string) => l.length > 0 && !l.startsWith('-----'));
+  const base64Body = lines.join('').replace(/[^A-Za-z0-9+/=]/g, '');
+  const chunks: string[] = [];
+  for (let i = 0; i < base64Body.length; i += 64) {
+    chunks.push(base64Body.slice(i, i + 64));
+  }
+  parsed.private_key = [
+    '-----BEGIN PRIVATE KEY-----',
+    ...chunks,
+    '-----END PRIVATE KEY-----',
+    '',
+  ].join('\n');
   return parsed as ServiceAccountCredentials;
 }
 
