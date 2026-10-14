@@ -97,15 +97,22 @@ export function loadCredentials(customKey?: string, customFilePath?: string): Se
     }
   }
 
-  // Fallback 2: Local credentials.json
-  const localFile = customFilePath || path.resolve(process.cwd(), 'credentials.json');
-  if (fs.existsSync(localFile)) {
-    try {
-      const raw = fs.readFileSync(localFile, 'utf8');
-      const parsed = JSON.parse(raw);
-      return validateAndNormalizeCredentials(parsed);
-    } catch (err: any) {
-      throw new Error(`Failed to parse credentials.json: ${err.message}`);
+  // Fallback 2: Secret files and local credentials.json
+  const candidateFiles = [
+    customFilePath,
+    '/etc/secrets/credentials.json',
+    path.resolve(process.cwd(), 'credentials.json'),
+  ].filter(Boolean) as string[];
+
+  for (const file of candidateFiles) {
+    if (fs.existsSync(file)) {
+      try {
+        const raw = fs.readFileSync(file, 'utf8');
+        const parsed = JSON.parse(raw);
+        return validateAndNormalizeCredentials(parsed);
+      } catch (err: any) {
+        throw new Error(`Failed to parse credentials file at ${file}: ${err.message}`);
+      }
     }
   }
 
