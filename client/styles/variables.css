@@ -1,0 +1,40 @@
+/* CSS Custom Properties - Chromium M56 Compatible */
+:root {
+  /* Colors */
+  --bg-canvas: #121212;
+  --bg-surface: #1E1E1E;
+  --bg-surface-elevated: #282828;
+  --text-primary: #FFFFFF;
+  --text-secondary: #A0A5B5;
+  --text-muted: #6B7280;
+  --accent-cyan: #00A8FF;
+  --accent-gold: #F5A623;
+  --accent-red: #FF4757;
+  
+  /* Focus Glow */
+  --focus-border: 3px solid #00A8FF;
+  --focus-shadow: 0 0 18px rgba(0, 168, 255, 0.85), 0 0 36px rgba(0, 168, 255, 0.35);
+  --focus-scale: scale(1.06);
+
+  /* Spacing (Strict margins instead of gap) */
+  --space-xs: 8px;
+  --space-sm: 16px;
+  --space-md: 24px;
+  --space-lg: 32px;
+  --space-xl: 48px;
+
+  /* Typography Scale for 10-Foot UI */
+  --font-hero: 44px;
+  --font-title: 32px;
+  --font-card-title: 20px;
+  --font-body: 22px;
+  --font-badge: 16px;
+
+  /* Card Dimensions */
+  --poster-width: 200px;
+  --poster-height: 300px;
+  --landscape-width: 320px;
+  --landscape-height: 180px;
+  --square-width: 220px;
+  --square-height: 220px;
+}

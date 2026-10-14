@@ -1,0 +1,198 @@
+/* ==========================================================================
+   Movie Detail Modal (Chromium M56 Compatible)
+   ========================================================================== */
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 1920px;
+  height: 1080px;
+  background-color: #0d0f14;
+  z-index: 500;
+  overflow: hidden;
+  display: flex;
+}
+
+.modal-backdrop-layer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 1920px;
+  height: 1080px;
+  background-size: cover;
+  background-position: center center;
+  background-repeat: no-repeat;
+  transition: opacity 0.4s ease-in-out;
+  z-index: 501;
+}
+
+.modal-gradient-layer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 1920px;
+  height: 1080px;
+  background: linear-gradient(to right, rgba(13, 15, 20, 0.98) 42%, rgba(13, 15, 20, 0.85) 75%, rgba(13, 15, 20, 0.6) 100%);
+  z-index: 502;
+}
+
+.modal-content-container {
+  position: relative;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  width: 1920px;
+  height: 1080px;
+  padding-left: 100px;
+  padding-right: 100px;
+  box-sizing: border-box;
+  z-index: 503;
+}
+
+/* Left Column: Poster */
+.modal-poster-col {
+  width: 320px;
+  margin-right: 60px;
+  flex-shrink: 0;
+}
+
+.modal-poster-frame {
+  width: 320px;
+  height: 480px;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.8), 0 0 30px rgba(0, 0, 0, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.modal-poster-img {
+  width: 320px;
+  height: 480px;
+  object-fit: cover;
+  display: block;
+}
+
+/* Right Column: Details */
+.modal-details-col {
+  flex: 1;
+  max-width: 1100px;
+  display: flex;
+  flex-direction: column;
+}
+
+.modal-title {
+  font-size: 44px;
+  font-weight: 800;
+  color: #ffffff;
+  margin: 0 0 16px 0;
+  line-height: 1.15;
+}
+
+.modal-meta-row {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.meta-pill {
+  padding: 4px 12px;
+  background-color: #1e222d;
+  color: #ffffff;
+  font-size: 18px;
+  font-weight: 700;
+  border-radius: 6px;
+  margin-right: 14px;
+}
+
+.meta-rating {
+  background-color: #f5a623;
+  color: #000000;
+}
+
+.meta-genres {
+  font-size: 18px;
+  color: #a0a5b5;
+  font-weight: 500;
+}
+
+.modal-synopsis-box {
+  margin-bottom: 28px;
+}
+
+.modal-synopsis {
+  font-size: 22px;
+  line-height: 1.5;
+  color: #e0e4ed;
+  margin: 0;
+  max-height: 135px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.modal-credits-box {
+  margin-bottom: 36px;
+  border-left: 4px solid #00a8ff;
+  padding-left: 16px;
+}
+
+.credit-line {
+  font-size: 18px;
+  margin: 6px 0;
+  color: #c0c5d5;
+}
+
+.credit-label {
+  color: #ffffff;
+  margin-right: 8px;
+}
+
+.modal-actions-row {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.btn-modal {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  height: 56px;
+  padding: 0 36px;
+  margin-right: 20px;
+  border-radius: 28px;
+  font-size: 20px;
+  font-weight: 700;
+  cursor: pointer;
+  outline: none;
+  border: 3px solid transparent;
+  transition: transform 0.2s cubic-bezier(0.2, 0, 0, 1), box-shadow 0.2s, background-color 0.2s;
+}
+
+.btn-play {
+  background-color: #00a8ff;
+  color: #ffffff;
+}
+
+.btn-play .btn-icon {
+  margin-right: 12px;
+  font-size: 18px;
+}
+
+.btn-close {
+  background-color: #242936;
+  color: #ffffff;
+}
+
+.btn-close .btn-icon {
+  margin-right: 12px;
+  font-size: 16px;
+}
+
+.btn-modal.is-focused {
+  transform: scale(1.08);
+  border-color: #ffffff;
+  box-shadow: 0 0 25px rgba(0, 168, 255, 0.9), 0 0 50px rgba(0, 168, 255, 0.4);
+}

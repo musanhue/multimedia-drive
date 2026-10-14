@@ -1,0 +1,41 @@
+{
+  "version": 2,
+  "outputDirectory": "dist/client",
+  "rewrites": [
+    {
+      "source": "/api/(.*)",
+      "destination": "/api/index"
+    }
+  ],
+  "headers": [
+    {
+      "source": "/api/stream/(.*)",
+      "headers": [
+        { "key": "Access-Control-Allow-Origin", "value": "*" },
+        { "key": "Access-Control-Allow-Methods", "value": "GET, HEAD, POST, OPTIONS" },
+        { "key": "Access-Control-Allow-Headers", "value": "Range, Accept-Ranges, Content-Type, Authorization, X-Simulate-Auth-Failure, X-Simulate-Rate-Limit" },
+        { "key": "Access-Control-Expose-Headers", "value": "Content-Range, Content-Length, Accept-Ranges" },
+        { "key": "Cache-Control", "value": "public, max-age=3600, no-transform" }
+      ]
+    },
+    {
+      "source": "/api/subtitles/(.*)",
+      "headers": [
+        { "key": "Access-Control-Allow-Origin", "value": "*" },
+        { "key": "Access-Control-Allow-Methods", "value": "GET, HEAD, POST, OPTIONS" },
+        { "key": "Access-Control-Allow-Headers", "value": "Range, Accept-Ranges, Content-Type, Authorization, X-Simulate-Auth-Failure, X-Simulate-Rate-Limit" },
+        { "key": "Access-Control-Expose-Headers", "value": "Content-Range, Content-Length, Accept-Ranges" },
+        { "key": "Cache-Control", "value": "public, max-age=86400" }
+      ]
+    },
+    {
+      "source": "/api/(.*)",
+      "headers": [
+        { "key": "Access-Control-Allow-Origin", "value": "*" },
+        { "key": "Access-Control-Allow-Methods", "value": "GET, HEAD, POST, OPTIONS" },
+        { "key": "Access-Control-Allow-Headers", "value": "Range, Accept-Ranges, Content-Type, Authorization, X-Simulate-Auth-Failure, X-Simulate-Rate-Limit" },
+        { "key": "Access-Control-Expose-Headers", "value": "Content-Range, Content-Length, Accept-Ranges" }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<widget xmlns="http://www.w3.org/ns/widgets" 
+        xmlns:tizen="http://tizen.org/ns/widgets" 
+        id="http://multimediadrive.samsung.tv/app" 
+        version="1.0.0" 
+        viewmodes="fullscreen">
+    <tizen:application id="tB7x9K3qL1.MultimediaDrive" 
+                       package="tB7x9K3qL1" 
+                       required_version="4.0"/>
+    <name>Multimedia Drive</name>
+    <description>Autonomous multimedia streaming platform for Samsung Smart TV UN50NU7400 (Tizen 4.0 / Chromium M56)</description>
+    <author href="http://multimediadrive.samsung.tv">Multimedia Drive Team</author>
+    <content src="index.html"/>
+    <icon src="icon.png"/>
+    <tizen:profile name="tv-samsung"/>
+    <tizen:setting screen-orientation="landscape" hwkey-event="enable"/>
+    <tizen:privilege name="http://tizen.org/privilege/internet"/>
+    <tizen:privilege name="http://tizen.org/privilege/tv.inputdevice"/>
+    <access origin="*" subdomains="true"/>
+</widget>

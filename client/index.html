@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=1920, user-scalable=no">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="0">
+  <title>Multimedia Drive</title>
+  <link rel="stylesheet" href="./styles/reset.css">
+  <link rel="stylesheet" href="./styles/variables.css">
+  <link rel="stylesheet" href="./styles/main.css">
+  <link rel="stylesheet" href="./styles/navigation.css">
+  <link rel="stylesheet" href="./styles/components.css">
+  <link rel="stylesheet" href="./styles/catalog.css">
+  <link rel="stylesheet" href="./styles/modal.css">
+  <link rel="stylesheet" href="./styles/player.css">
+  <link rel="stylesheet" href="./styles/slideshow.css">
+  <link rel="stylesheet" href="./styles/audio.css">
+</head>
+<body>
+  <div id="tv-app" class="tv-viewport">
+    <!-- Main Dynamic View Container -->
+    <main id="main-view-container" class="main-view-container" data-layer="catalog">
+      <!-- Carousel Rows will be injected here -->
+    </main>
+
+    <!-- Modal Layer Container (Movie Detail, Settings) -->
+    <div id="modal-container" class="modal-layer-container hidden" data-layer="modal"></div>
+
+    <!-- Video Player Layer Container -->
+    <div id="player-container" class="player-layer-container hidden" data-layer="player"></div>
+
+    <!-- Photo Slideshow Layer Container -->
+    <div id="slideshow-container" class="slideshow-layer-container hidden" data-layer="slideshow"></div>
+
+    <!-- Audio Player Layer Container -->
+    <div id="audio-container" class="audio-layer-container hidden" data-layer="audio"></div>
+
+    <!-- Exit Confirmation Dialog Layer Container -->
+    <div id="exit-dialog-container" class="exit-dialog-layer-container hidden" data-layer="exit_dialog"></div>
+  </div>
+
+  <script type="module" src="./src/app.ts"></script>
+</body>
+</html>

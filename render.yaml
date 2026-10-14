@@ -1,0 +1,18 @@
+services:
+  - type: web
+    name: multimedia-drive
+    env: node
+    plan: free
+    region: oregon
+    buildCommand: npm install && npm run build:all
+    startCommand: npm start
+    autoDeploy: true
+    envVars:
+      - key: NODE_VERSION
+        value: 20
+      - key: DRIVE_ROOT_FOLDER_ID
+        sync: false
+      - key: TMDB_API_KEY
+        sync: false
+      - key: GOOGLE_SERVICE_ACCOUNT_KEY
+        sync: false

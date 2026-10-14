@@ -1,0 +1,45 @@
+/* 2D Spatial Navigation Focus Styling - Zero focus-visible */
+.nav-item {
+  position: relative;
+  outline: none;
+  border: 3px solid transparent;
+  border-radius: 8px;
+  transition: transform 0.18s cubic-bezier(0.2, 0, 0, 1), box-shadow 0.18s ease-out, border-color 0.18s ease-out;
+  transform: translate3d(0, 0, 0);
+  will-change: transform, box-shadow;
+}
+
+/* Luminous Focus Indicator */
+.nav-item.is-focused,
+.nav-item.focused {
+  border: var(--focus-border);
+  box-shadow: var(--focus-shadow);
+  transform: var(--focus-scale);
+  z-index: 10;
+}
+
+/* Button Focus Indicators */
+.btn-nav {
+  display: inline-flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  padding: 16px 36px;
+  background-color: var(--bg-surface-elevated);
+  color: var(--text-primary);
+  font-size: 22px;
+  font-weight: 700;
+  border-radius: 8px;
+  border: 3px solid transparent;
+  transition: transform 0.18s ease-out, box-shadow 0.18s ease-out, border-color 0.18s ease-out;
+}
+
+.btn-nav.is-focused,
+.btn-nav.focused {
+  background-color: var(--accent-cyan);
+  color: #000000;
+  border: 3px solid #FFFFFF;
+  box-shadow: 0 0 24px rgba(0, 168, 255, 0.9);
+  transform: scale(1.08);
+  z-index: 10;
+}

@@ -1,0 +1,177 @@
+/* Carousel Rows - Strict Flexbox with Margin Spacing (ZERO Grid, ZERO Gap) */
+.carousel-row {
+  margin-bottom: 40px;
+  padding-left: 60px;
+}
+
+.carousel-title {
+  font-size: var(--font-title);
+  font-weight: 700;
+  margin-bottom: 18px;
+  color: var(--text-primary);
+}
+
+.carousel-track-wrapper {
+  overflow: hidden;
+  width: 1860px;
+}
+
+.carousel-track {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  transition: transform 0.25s cubic-bezier(0.2, 0, 0, 1);
+  will-change: transform;
+}
+
+/* Media Cards */
+.media-card {
+  flex-shrink: 0;
+  background-color: var(--bg-surface);
+  overflow: hidden;
+  margin-right: 24px; /* Explicit margin spacing */
+}
+
+/* 2:3 Movie / Series Poster */
+.card-poster {
+  width: var(--poster-width);
+  height: var(--poster-height);
+}
+
+.card-poster img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* 16:9 Landscape Card (Videos familiares) */
+.card-landscape {
+  width: var(--landscape-width);
+  height: var(--landscape-height);
+}
+
+.card-landscape img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* 1:1 Square Card (Fotos / Música) */
+.card-square {
+  width: var(--square-width);
+  height: var(--square-height);
+}
+
+.card-square img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* Badges & Pills */
+.badge-pill {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  padding: 4px 10px;
+  border-radius: 4px;
+  font-size: var(--font-badge);
+  font-weight: 700;
+  background-color: rgba(0, 0, 0, 0.75);
+}
+
+.badge-gold {
+  color: var(--accent-gold);
+}
+
+.badge-duration {
+  top: auto;
+  bottom: 10px;
+  right: 10px;
+  background-color: rgba(0, 0, 0, 0.85);
+  color: var(--text-primary);
+}
+
+/* Modal Overlay Layer */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 1920px;
+  height: 1080px;
+  background: rgba(13, 15, 20, 0.95);
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  z-index: 500;
+}
+
+.modal-content {
+  display: flex;
+  flex-direction: row;
+  width: 1600px;
+  height: 800px;
+  background-color: var(--bg-surface);
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8);
+}
+
+.modal-poster-col {
+  width: 480px;
+  height: 100%;
+  flex-shrink: 0;
+}
+
+.modal-poster-col img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.modal-details-col {
+  flex: 1;
+  padding: 60px;
+  display: flex;
+  flex-direction: column;
+}
+
+.modal-title {
+  font-size: var(--font-hero);
+  font-weight: 800;
+  margin-bottom: 20px;
+}
+
+.modal-meta-row {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.modal-meta-item {
+  font-size: 20px;
+  color: var(--text-secondary);
+  margin-right: 24px;
+}
+
+.modal-overview {
+  font-size: var(--font-body);
+  line-height: 1.6;
+  color: var(--text-secondary);
+  margin-bottom: 40px;
+}
+
+.modal-actions-row {
+  display: flex;
+  flex-direction: row;
+  margin-top: auto;
+}
+
+.modal-actions-row .btn-nav {
+  margin-right: 24px;
+}

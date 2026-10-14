@@ -1,0 +1,18 @@
+{
+  "name": "multimedia-drive-functions",
+  "version": "1.0.0",
+  "description": "Firebase Cloud Function for Multimedia Drive",
+  "main": "index.js",
+  "engines": {
+    "node": "22"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "firebase-admin": "^13.0.0",
+    "firebase-functions": "^6.0.0",
+    "googleapis": "^144.0.0"
+  },
+  "private": true
+}

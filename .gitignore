@@ -1,0 +1,15 @@
+# Archivos sensibles de credenciales
+credentials.json
+JSON/
+*.key
+.env
+.env.local
+
+# Dependencias
+node_modules/
+
+# Archivos de build y temporales
+dist/
+cache/
+scratch/
+.firebase/

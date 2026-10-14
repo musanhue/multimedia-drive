@@ -1,0 +1,59 @@
+/* Base 10-Foot Layout - Chromium M56 Compatible */
+.tv-viewport {
+  position: relative;
+  width: 1920px;
+  height: 1080px;
+  overflow: hidden;
+  background-color: var(--bg-canvas);
+}
+
+.app-header {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  height: 90px;
+  padding-left: 60px;
+  padding-right: 60px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.brand-title {
+  font-size: var(--font-title);
+  font-weight: 800;
+  letter-spacing: 2px;
+  color: var(--text-primary);
+}
+
+.header-status {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.header-time {
+  font-size: 26px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  margin-right: 20px;
+}
+
+.status-indicator {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background-color: #2ED573;
+  box-shadow: 0 0 10px #2ED573;
+}
+
+.main-view-container {
+  width: 1920px;
+  height: 990px;
+  overflow: hidden;
+  padding-top: 30px;
+  position: relative;
+}
+
+.hidden {
+  display: none !important;
+}

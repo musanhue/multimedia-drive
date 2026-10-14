@@ -1,0 +1,559 @@
+/* ==========================================================================
+   Catalog View & Carousel Rows (Chromium M56 Compatible)
+   ========================================================================== */
+
+.catalog-view {
+  position: relative;
+  width: 1920px;
+  height: 1080px;
+  background-color: #0d0f14;
+  color: #ffffff;
+  overflow: hidden;
+  user-select: none;
+  font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, sans-serif;
+}
+
+/* Header & Tabs */
+.catalog-header {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 1920px;
+  height: 90px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  padding-left: 80px;
+  padding-right: 80px;
+  box-sizing: border-box;
+  background: linear-gradient(to bottom, rgba(13, 15, 20, 0.95) 0%, rgba(13, 15, 20, 0) 100%);
+  z-index: 100;
+}
+
+.header-brand {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.brand-title {
+  font-size: 28px;
+  font-weight: 800;
+  letter-spacing: 2px;
+  color: #ffffff;
+  margin-right: 14px;
+}
+
+.status-indicator {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background-color: #00e676;
+  box-shadow: 0 0 10px #00e676;
+}
+
+.version-badge {
+  font-size: 13px;
+  background-color: rgba(0, 168, 255, 0.18);
+  color: #00a8ff;
+  border: 1px solid rgba(0, 168, 255, 0.45);
+  padding: 2px 8px;
+  border-radius: 4px;
+  margin-left: 12px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+}
+
+.category-tabs {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.nav-tab {
+  background: transparent;
+  border: 2px solid transparent;
+  color: #a0a5b5;
+  font-size: 20px;
+  font-weight: 600;
+  padding: 8px 20px;
+  margin-right: 12px;
+  border-radius: 20px;
+  cursor: pointer;
+  outline: none;
+  transition: transform 0.2s cubic-bezier(0.2, 0, 0, 1), color 0.2s, background-color 0.2s;
+}
+
+.nav-tab.is-focused {
+  color: #ffffff;
+  background-color: rgba(0, 168, 255, 0.2);
+  border-color: #00a8ff;
+  transform: scale(1.08);
+  box-shadow: 0 0 18px rgba(0, 168, 255, 0.6);
+}
+
+.nav-tab.is-active {
+  color: #00a8ff;
+  border-bottom: 3px solid #00a8ff;
+  border-radius: 4px;
+}
+
+.header-actions {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.btn-refresh {
+  background-color: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: #a0a5b5;
+  font-size: 16px;
+  font-weight: 600;
+  padding: 6px 14px;
+  margin-right: 20px;
+  border-radius: 16px;
+  cursor: pointer;
+  outline: none;
+  transition: all 0.2s cubic-bezier(0.2, 0, 0, 1);
+}
+
+.btn-refresh:hover,
+.btn-refresh.is-focused {
+  color: #ffffff;
+  background-color: rgba(0, 168, 255, 0.25);
+  border-color: #00a8ff;
+  transform: scale(1.05);
+  box-shadow: 0 0 14px rgba(0, 168, 255, 0.5);
+}
+
+.header-clock {
+  font-size: 24px;
+  font-weight: 700;
+  color: #ffffff;
+}
+
+.catalog-empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 120px 80px;
+  text-align: center;
+}
+
+.catalog-empty-state h3 {
+  font-size: 28px;
+  font-weight: 700;
+  color: #ffffff;
+  margin-bottom: 16px;
+}
+
+.catalog-empty-state p {
+  font-size: 20px;
+  color: #a0a5b5;
+  max-width: 600px;
+  margin-bottom: 28px;
+}
+
+/* Loading & Error States */
+.catalog-loading,
+.catalog-error {
+  position: absolute;
+  top: 90px;
+  left: 0;
+  width: 1920px;
+  height: 990px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 50;
+}
+
+.catalog-spinner {
+  width: 60px;
+  height: 60px;
+  border: 6px solid rgba(255, 255, 255, 0.1);
+  border-top-color: #00a8ff;
+  border-radius: 50%;
+  animation: spin 1s infinite linear;
+  margin-bottom: 24px;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.catalog-loading-text,
+.catalog-error-msg {
+  font-size: 24px;
+  color: #a0a5b5;
+}
+
+.btn-retry {
+  margin-top: 24px;
+  padding: 12px 32px;
+  background-color: #181b22;
+  border: 2px solid #00a8ff;
+  color: #ffffff;
+  font-size: 20px;
+  font-weight: 600;
+  border-radius: 8px;
+  outline: none;
+}
+
+.btn-retry.is-focused {
+  background-color: #00a8ff;
+  box-shadow: 0 0 20px rgba(0, 168, 255, 0.8);
+}
+
+/* Filter Bar */
+.catalog-filter-bar {
+  position: absolute;
+  top: 85px;
+  left: 0;
+  width: 1920px;
+  height: 65px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  padding-left: 80px;
+  padding-right: 80px;
+  box-sizing: border-box;
+  background-color: rgba(18, 21, 28, 0.95);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  z-index: 90;
+}
+
+.search-box-wrapper {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.08);
+  border: 2px solid transparent;
+  border-radius: 20px;
+  padding: 6px 16px;
+  width: 380px;
+  transition: all 0.2s;
+}
+
+.search-box-wrapper:focus-within,
+.search-input.is-focused {
+  border-color: #00a8ff;
+  background: rgba(0, 168, 255, 0.15);
+  box-shadow: 0 0 12px rgba(0, 168, 255, 0.5);
+}
+
+.search-icon {
+  font-size: 18px;
+  margin-right: 10px;
+  opacity: 0.8;
+}
+
+.search-input {
+  background: transparent;
+  border: none;
+  color: #ffffff;
+  font-size: 16px;
+  outline: none;
+  width: 100%;
+}
+
+.search-input::placeholder {
+  color: #8b92a5;
+}
+
+.btn-search-clear {
+  background: transparent;
+  border: none;
+  color: #8b92a5;
+  font-size: 16px;
+  cursor: pointer;
+  outline: none;
+  padding: 0 4px;
+}
+
+.btn-search-clear:hover {
+  color: #ffffff;
+}
+
+.filter-dropdowns {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.filter-group {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin-right: 16px;
+}
+
+.filter-group label {
+  font-size: 15px;
+  color: #8b92a5;
+  font-weight: 600;
+}
+
+.filter-select {
+  background: #181b22;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: #ffffff;
+  font-size: 15px;
+  font-weight: 500;
+  padding: 6px 14px;
+  border-radius: 8px;
+  outline: none;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.filter-select.is-focused,
+.filter-select:focus {
+  border-color: #00a8ff;
+  background-color: rgba(0, 168, 255, 0.25);
+  box-shadow: 0 0 12px rgba(0, 168, 255, 0.6);
+  transform: scale(1.04);
+}
+
+.btn-reset-filters {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: #a0a5b5;
+  font-size: 14px;
+  font-weight: 600;
+  padding: 6px 14px;
+  border-radius: 8px;
+  cursor: pointer;
+  outline: none;
+  transition: all 0.2s;
+}
+
+.btn-reset-filters:hover,
+.btn-reset-filters.is-focused {
+  background: #ff4757;
+  border-color: #ff4757;
+  color: #ffffff;
+  box-shadow: 0 0 12px rgba(255, 71, 87, 0.6);
+  transform: scale(1.04);
+}
+
+/* Viewport Stack */
+.carousel-viewport-wrapper {
+  position: absolute;
+  top: 155px;
+  left: 0;
+  width: 1920px;
+  height: 925px;
+  overflow: hidden;
+}
+
+.carousel-rows-stack {
+  position: relative;
+  width: 1920px;
+  will-change: transform;
+  transition: transform 0.3s cubic-bezier(0.2, 0, 0, 1);
+}
+
+/* Rows */
+.carousel-row {
+  margin-bottom: 40px;
+  width: 1920px;
+  box-sizing: border-box;
+}
+
+.row-title {
+  font-size: 26px;
+  font-weight: 700;
+  color: #ffffff;
+  padding-left: 80px;
+  margin: 0 0 16px 0;
+}
+
+.carousel-track-viewport {
+  width: 1920px;
+  overflow: hidden;
+  position: relative;
+}
+
+.carousel-track {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  padding-left: 80px;
+  padding-right: 80px;
+  will-change: transform;
+  transition: transform 0.25s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+.row-empty-notice {
+  font-size: 20px;
+  color: #666e80;
+  padding: 40px 0;
+}
+
+/* Movie & Series Media Cards (2:3 aspect ratio) */
+.media-card {
+  position: relative;
+  width: 200px;
+  height: 300px;
+  margin-right: 24px;
+  flex-shrink: 0;
+  border-radius: 8px;
+  background-color: #181b22;
+  border: 3px solid transparent;
+  outline: none;
+  cursor: pointer;
+  transition: transform 0.2s cubic-bezier(0.2, 0, 0, 1), border-color 0.2s, box-shadow 0.2s;
+}
+
+.media-card.is-focused {
+  transform: scale(1.08);
+  border-color: #00a8ff;
+  box-shadow: 0 0 25px rgba(0, 168, 255, 0.8), 0 10px 30px rgba(0, 0, 0, 0.7);
+  z-index: 20;
+}
+
+.card-poster-wrap {
+  position: relative;
+  width: 200px;
+  height: 300px;
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.card-poster-img {
+  width: 200px;
+  height: 300px;
+  object-fit: cover;
+  display: block;
+}
+
+.card-badge {
+  position: absolute;
+  padding: 4px 8px;
+  font-size: 14px;
+  font-weight: 700;
+  border-radius: 4px;
+  color: #ffffff;
+  background-color: rgba(13, 15, 20, 0.85);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.5);
+}
+
+.rating-badge {
+  top: 8px;
+  right: 8px;
+  background-color: rgba(245, 166, 35, 0.9);
+  color: #000000;
+}
+
+.year-badge {
+  bottom: 8px;
+  left: 8px;
+}
+
+.episode-badge {
+  top: 8px;
+  left: 8px;
+  background-color: rgba(0, 168, 255, 0.9);
+}
+
+.card-info {
+  display: none;
+}
+
+/* Family Video Cards (16:9 aspect ratio) */
+.family-video-card {
+  position: relative;
+  width: 320px;
+  height: 180px;
+  margin-right: 24px;
+  flex-shrink: 0;
+  border-radius: 8px;
+  background-color: #181b22;
+  border: 3px solid transparent;
+  outline: none;
+  cursor: pointer;
+  transition: transform 0.2s cubic-bezier(0.2, 0, 0, 1), border-color 0.2s, box-shadow 0.2s;
+}
+
+.family-video-card.is-focused {
+  transform: scale(1.08);
+  border-color: #00a8ff;
+  box-shadow: 0 0 25px rgba(0, 168, 255, 0.8), 0 10px 30px rgba(0, 0, 0, 0.7);
+  z-index: 20;
+}
+
+.family-thumb-wrapper {
+  position: relative;
+  width: 320px;
+  height: 180px;
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.family-thumb-img {
+  width: 320px;
+  height: 180px;
+  object-fit: cover;
+  display: block;
+}
+
+.family-badge-container-top {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  display: flex;
+  flex-direction: row;
+}
+
+.family-badge-container-bottom {
+  position: absolute;
+  bottom: 8px;
+  left: 8px;
+  right: 8px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.family-badge {
+  padding: 4px 8px;
+  font-size: 14px;
+  font-weight: 700;
+  border-radius: 4px;
+  color: #ffffff;
+  background-color: rgba(13, 15, 20, 0.85);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.6);
+}
+
+.family-res-badge.is-4k {
+  background-color: rgba(229, 9, 20, 0.9);
+}
+
+.family-info-box {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 320px;
+  padding: 10px;
+  box-sizing: border-box;
+  background: linear-gradient(to top, rgba(13, 15, 20, 0.9) 0%, rgba(13, 15, 20, 0) 100%);
+  border-bottom-left-radius: 6px;
+  border-bottom-right-radius: 6px;
+}
+
+.family-title {
+  display: block;
+  font-size: 16px;
+  font-weight: 600;
+  color: #ffffff;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}

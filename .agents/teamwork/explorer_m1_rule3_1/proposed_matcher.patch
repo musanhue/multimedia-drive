@@ -1,0 +1,205 @@
+--- a/server/subtitles/matcher.ts
++++ b/server/subtitles/matcher.ts
+@@ -12,6 +12,8 @@
+   esp: { code: 'es', label: 'Español' },
+   spanish: { code: 'es', label: 'Español' },
++  espanol: { code: 'es', label: 'Español' },
++  español: { code: 'es', label: 'Español' },
+   castellano: { code: 'es', label: 'Español' },
+   'es-la': { code: 'es-LA', label: 'Español (Latino)' },
+   'es-419': { code: 'es-LA', label: 'Español (Latino)' },
+@@ -45,9 +47,36 @@
+ const RELEASE_TAGS_REGEX = /[._ -]+(?:1080p|720p|480p|2160p|4k|bluray|bdrip|brrip|web-?dl|webrip|dvdrip|hdrip|x264|x265|h264|h265|hevc|aac|ac3|dts|remux)(?:[._ -]+.*)?$/i;
++const YEAR_REGEX = /[._ -]+(?:19\d{2}|20\d{2})(?:[._ -]+.*)?$/i;
+ 
+ function isKnownQualifierToken(token: string): boolean {
+   return Boolean(LANGUAGE_MAP[token] || FORCED_TOKENS.has(token) || MODIFIER_TOKENS.has(token));
+ }
+ 
++function parseTokensQualifier(tokens: string[]): { lang: string; label: string; isForced: boolean } {
++  let lang = 'es';
++  let label = 'Español';
++  let isForced = false;
++
++  for (let i = 0; i < tokens.length; i++) {
++    const t = tokens[i];
++    const next = tokens[i + 1];
++    if (next && LANGUAGE_MAP[`${t}-${next}`]) {
++      lang = LANGUAGE_MAP[`${t}-${next}`].code;
++      label = LANGUAGE_MAP[`${t}-${next}`].label;
++      i++;
++    } else if (LANGUAGE_MAP[t]) {
++      lang = LANGUAGE_MAP[t].code;
++      label = LANGUAGE_MAP[t].label;
++    } else if (FORCED_TOKENS.has(t)) {
++      isForced = true;
++    }
++  }
++
++  if (isForced) {
++    label += ' (Forzados)';
++  }
++
++  return { lang, label, isForced };
++}
++
+ export function matchSubtitlesForVideo(
+   videoFileName: string,
+   folderFiles: DriveFileInfo[]
+ ): SubtitleTrack[] {
+   const videoBase = videoFileName.replace(/\.[^/.]+$/, '').toLowerCase();
+   const cleanVideoBase = videoBase.replace(RELEASE_TAGS_REGEX, '');
++  const cleanVideoTitle = cleanVideoBase.replace(YEAR_REGEX, '');
+   const subtitleFiles = folderFiles.filter((f) => /\.(srt|vtt)$/i.test(f.name));
+   const results: SubtitleTrack[] = [];
+ 
+   for (const sub of subtitleFiles) {
+     const extMatch = sub.name.match(/\.(srt|vtt)$/i);
+     if (!extMatch) continue;
+     const format = extMatch[1].toLowerCase() as 'srt' | 'vtt';
+     const subNameWithoutExt = sub.name.slice(0, -(format.length + 1)).toLowerCase();
+ 
+     let matched = false;
+     let lang = 'es';
+     let label = 'Español';
+     let isForced = false;
+ 
+-    // Rule 1: Exact base name match (against full video base or clean release base)
+-    if (subNameWithoutExt === videoBase || (cleanVideoBase && subNameWithoutExt === cleanVideoBase)) {
++    // Rule 1: Exact base name match (against full video base, clean release base, or clean video title)
++    if (
++      subNameWithoutExt === videoBase ||
++      (cleanVideoBase && subNameWithoutExt === cleanVideoBase) ||
++      (cleanVideoTitle && subNameWithoutExt === cleanVideoTitle)
++    ) {
+       matched = true;
+     }
+     // Rule 2: Prefix match requiring delimiter boundary + strict qualifier tokens
+     else {
+-      const baseToMatch = subNameWithoutExt.startsWith(videoBase)
+-        ? videoBase
+-        : (cleanVideoBase && subNameWithoutExt.startsWith(cleanVideoBase) ? cleanVideoBase : null);
+-
+-      if (baseToMatch) {
++      const candidateBases = [videoBase];
++      if (cleanVideoBase && cleanVideoBase !== videoBase) candidateBases.push(cleanVideoBase);
++      if (cleanVideoTitle && cleanVideoTitle !== cleanVideoBase && cleanVideoTitle !== videoBase) candidateBases.push(cleanVideoTitle);
++
++      for (const baseToMatch of candidateBases) {
++        if (subNameWithoutExt.startsWith(baseToMatch)) {
+           const rest = subNameWithoutExt.substring(baseToMatch.length);
+           const delimiterMatch = rest.match(/^[._ -]+/);
+ 
+           if (delimiterMatch) {
+             const suffix = rest.slice(delimiterMatch[0].length);
+             const tokens = suffix.split(/[._ -]+/).filter(Boolean);
+ 
+             // Subtitle must contain at least one token, all tokens must be known qualifier tokens,
+             // and at least one token must specify language or forced status.
+             // This strictly prevents sequels (e.g. Matrix.Reloaded.2003.srt) from matching.
+             if (
+               tokens.length > 0 &&
+               tokens.every(isKnownQualifierToken) &&
+-              tokens.some((t) => LANGUAGE_MAP[t] || FORCED_TOKENS.has(t))
++              tokens.some((t) => LANGUAGE_MAP[t] || FORCED_TOKENS.has(t) || (tokens.length >= 2 && LANGUAGE_MAP[`${tokens[0]}-${tokens[1]}`]))
+             ) {
+               matched = true;
+-              for (const token of tokens) {
+-                if (FORCED_TOKENS.has(token)) {
+-                  isForced = true;
+-                } else if (LANGUAGE_MAP[token]) {
+-                  lang = LANGUAGE_MAP[token].code;
+-                  label = LANGUAGE_MAP[token].label;
+-                }
+-              }
+-              if (isForced) {
+-                label += ' (Forzados)';
+-              }
++              const parsed = parseTokensQualifier(tokens);
++              lang = parsed.lang;
++              label = parsed.label;
++              isForced = parsed.isForced;
++              break;
+             }
+           }
+         }
+       }
+     }
+ 
+     // Rule 3: Single subtitle file in directory fallback
+-    // Strictly allowed ONLY IF subtitle is a generic name (e.g. spanish.srt, sub.srt)
+-    // or contains the primary video title token. Never match across conflicting movie titles.
+     if (!matched && subtitleFiles.length === 1) {
+       const tokens = subNameWithoutExt.split(/[._ -]+/).filter(Boolean);
+-      const isGeneric = tokens.length > 0 && tokens.every(
+-        (t) => GENERIC_SUB_TOKENS.has(t) || LANGUAGE_MAP[t] || FORCED_TOKENS.has(t) || /^\d+$/.test(t)
+-      );
+-
+-      const videoTokens = cleanVideoBase.split(/[._ -]+/).filter((t) => t.length > 2);
+-      const hasTitleOverlap = tokens.some((t) => videoTokens.includes(t));
+-
+-      if (isGeneric || hasTitleOverlap) {
++      const isGeneric =
++        Boolean(LANGUAGE_MAP[subNameWithoutExt]) ||
++        GENERIC_SUB_TOKENS.has(subNameWithoutExt) ||
++        (tokens.length > 0 &&
++          tokens.every(
++            (t) =>
++              GENERIC_SUB_TOKENS.has(t) ||
++              Boolean(LANGUAGE_MAP[t]) ||
++              FORCED_TOKENS.has(t) ||
++              MODIFIER_TOKENS.has(t) ||
++              /^\d+$/.test(t)
++          ));
++
++      if (isGeneric) {
+         matched = true;
+-        for (const token of tokens) {
+-          if (FORCED_TOKENS.has(token)) {
+-            isForced = true;
+-          } else if (LANGUAGE_MAP[token]) {
+-            lang = LANGUAGE_MAP[token].code;
+-            label = LANGUAGE_MAP[token].label;
+-          }
+-        }
+-        if (isForced) {
+-          label += ' (Forzados)';
++        if (LANGUAGE_MAP[subNameWithoutExt]) {
++          lang = LANGUAGE_MAP[subNameWithoutExt].code;
++          label = LANGUAGE_MAP[subNameWithoutExt].label;
++        } else {
++          const parsed = parseTokensQualifier(tokens);
++          lang = parsed.lang;
++          label = parsed.label;
++          isForced = parsed.isForced;
++        }
++      } else {
++        // Condition (b): Prefix match against cleanVideoBase or cleanVideoTitle with delimiter and ONLY qualifier tokens
++        const candidateBases = [cleanVideoBase].filter(Boolean);
++        if (cleanVideoTitle && cleanVideoTitle !== cleanVideoBase) candidateBases.push(cleanVideoTitle);
++
++        for (const baseToMatch of candidateBases) {
++          if (subNameWithoutExt.startsWith(baseToMatch)) {
++            const rest = subNameWithoutExt.substring(baseToMatch.length);
++            const delimiterMatch = rest.match(/^[._ -]+/);
++
++            if (delimiterMatch) {
++              const suffix = rest.slice(delimiterMatch[0].length);
++              const suffixTokens = suffix.split(/[._ -]+/).filter(Boolean);
++
++              if (
++                suffixTokens.length > 0 &&
++                suffixTokens.every(isKnownQualifierToken)
++              ) {
++                matched = true;
++                const parsed = parseTokensQualifier(suffixTokens);
++                lang = parsed.lang;
++                label = parsed.label;
++                isForced = parsed.isForced;
++                break;
++              }
++            }
++          }
+         }
+       }
+     }
