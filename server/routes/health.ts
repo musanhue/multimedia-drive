@@ -32,6 +32,10 @@ healthRouter.get('/health', async (_req: Request, res: Response) => {
     if (!stack) stack = err.stack;
   }
 
+    const cryptoModule = await import('crypto');
+    const envHash = cryptoModule.createHash('sha256').update(process.env.GOOGLE_SERVICE_ACCOUNT_KEY || '').digest('hex');
+    const pkHash = cryptoModule.createHash('sha256').update(pk).digest('hex');
+
   res.json({
     status: 'ok',
     version: '1.0.0',
@@ -40,8 +44,9 @@ healthRouter.get('/health', async (_req: Request, res: Response) => {
     email: config.credentials?.client_email,
     cryptoTest,
     authTest,
+    envHash,
+    pkHash,
     charCodes: Array.from(pk.slice(0, 40)).map(c => c.charCodeAt(0)),
-    rawEnvSample: process.env.GOOGLE_SERVICE_ACCOUNT_KEY?.slice(0, 30),
     rawEnvLen: process.env.GOOGLE_SERVICE_ACCOUNT_KEY?.length,
     nodeVersion: process.version,
     stack,
